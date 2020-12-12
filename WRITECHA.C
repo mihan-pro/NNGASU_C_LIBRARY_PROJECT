@@ -59,18 +59,27 @@ void putVideoMemory(char *buffer);
 void descktop(char *windowName, int typeOfBorder);
 void name(char *name);
 void printBuffer(char *buffer);
-void printBufferToFile(char *bufer, char *fileName);
+void printBufferToFile(char *buffer, char *fileName);
+void startLogging();
+void finishLogging();
+void log(char *logText);
 
 char *buffer;
+FILE *logFile;
 
 int main()
 {
+	startLogging();
 	buffer = createBuffer();
+	descktop(" firstWindow", 0);
 	write_string(5, 5, "content", GREEN | BGMAGENTA);
+	descktop(" system ", 1);
 	takeVideoMemory(buffer);
-	printBufferToFile("my dear friend i wanna fuck you", "MyLog.txt");
+	log(buffer);
+	log("\n");
 	putVideoMemory(buffer);
 	free(buffer);
+	finishLogging();
 	return 0;
 }
 
@@ -79,6 +88,7 @@ void descktop(char *windowName, int typeOfBorder)
 	int row = 0;
 	int col = 0;
 	char border;
+	clear();
 	for (; row < MAX_ROW; row++)
 	{
 		for (; col <= MAX_COLUMN; col++)
@@ -169,66 +179,77 @@ char *createBuffer()
 {
 	char *buffer;
 	int size = BUFFER_SIZE;
+	char *tmpString;
+	char *sizeStr = itoa(size, tmpString, 10);
+	log(strcat(sizeStr, " - size of buffer\n"));
 	buffer = malloc(size);
 	if (!buffer)
 	{
-		printf("error in creating buffer \n");
+		perror("error in creating buffer \n");
+		log("error in creating buffer\n");
 		exit(1);
 	}
+	log("buffer was created succesfuly\n");
 	return buffer;
 }
 
-void printBufferToFile(char *bufer, char *fileName)
+void startLogging()
 {
-	FILE *file = fopen(fileName, "a");
-	if (file == NULL)
+	logFile = fopen("MyLog.txt", "w");
+	if (logFile == NULL)
 	{
 		perror("problem with creating file");
 	};
-	fputs(buffer, file);
-	fclose(file);
+}
+
+void finishLogging()
+{
+	fclose(logFile);
+}
+
+void log(char *logText)
+{
+	char writingStatus = fputs(logText, logFile);
+	if (writingStatus == EOF)
+	{
+		perror("problem with writing in file");
+	}
 }
 
 void takeVideoMemory(char *buffer)
 {
 	char *pointer = (char *)VIDEO_MEMORY;
 	char *buffer_pointer = buffer;
-	int row = 0;
-	int col = 0;
-	for (; row < MAX_ROW; row++)
+	int i = 0;
+	while (i < BUFFER_SIZE)
 	{
-		for (; col < MAX_COLUMN; col++)
-		{
-			*buffer_pointer = '0';
-			*buffer_pointer += 1;
-			*pointer += 1;
-			*buffer_pointer = GREEN | BGRED;
-			*buffer_pointer += 1;
-			*pointer += 1;
-		}
-		col = 0;
+		*buffer_pointer = *pointer;
+		*buffer_pointer += 1;
+		*pointer += 1;
+		*buffer_pointer = *pointer;
+		*buffer_pointer += 1;
+		*pointer += 1;
+		i += 1;
 	}
+	log("video memory was taken\n");
 };
 
 void putVideoMemory(char *buffer)
 {
 	char *pointer = (char *)VIDEO_MEMORY;
 	char *buffer_pointer = buffer;
-	int row = 0;
-	int col = 0;
-	for (; row < MAX_ROW; row++)
+	int i = 0;
+	while (i < BUFFER_SIZE)
 	{
-		for (; col < MAX_COLUMN; col++)
-		{
-			*pointer = *buffer_pointer;
-			*buffer_pointer += 1;
-			*pointer += 1;
-			*pointer = *buffer_pointer;
-			*buffer_pointer += 1;
-			*pointer += 1;
-		}
-		col = 0;
+		*pointer = *buffer_pointer;
+		*buffer_pointer += 1;
+		*pointer += 1;
+		*pointer = *buffer_pointer;
+		*buffer_pointer += 1;
+		*pointer += 1;
+		i += 1;
 	}
+	log("video memory was put\n");
 };
 
 void printBuffer(char *buffer)
