@@ -73,8 +73,8 @@ int main()
 	buffer = createBuffer();
 	descktop(" firstWindow", 0);
 	write_string(5, 5, "content", GREEN | BGMAGENTA);
-	descktop(" system ", 1);
 	takeVideoMemory(buffer);
+	descktop(" system ", 1);
 	log(buffer);
 	log("\n");
 	putVideoMemory(buffer);
@@ -224,11 +224,11 @@ void takeVideoMemory(char *buffer)
 	while (i < BUFFER_SIZE)
 	{
 		*buffer_pointer = *pointer;
-		*buffer_pointer += 1;
-		*pointer += 1;
+		buffer_pointer += 1;
+		pointer += 1;
 		*buffer_pointer = *pointer;
-		*buffer_pointer += 1;
-		*pointer += 1;
+		buffer_pointer += 1;
+		pointer += 1;
 		i += 1;
 	}
 	log("video memory was taken\n");
@@ -242,11 +242,11 @@ void putVideoMemory(char *buffer)
 	while (i < BUFFER_SIZE)
 	{
 		*pointer = *buffer_pointer;
-		*buffer_pointer += 1;
-		*pointer += 1;
+		buffer_pointer += 1;
+		pointer += 1;
 		*pointer = *buffer_pointer;
-		*buffer_pointer += 1;
-		*pointer += 1;
+		buffer_pointer += 1;
+		pointer += 1;
 		i += 1;
 	}
 	log("video memory was put\n");
