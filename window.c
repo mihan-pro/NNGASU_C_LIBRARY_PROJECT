@@ -1,6 +1,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
+#include "window.h"
 
 #define BLACK 0
 #define BLUE 1
@@ -63,17 +64,6 @@ void printBufferToFile(char *buffer, char *fileName);
 void startLogging();
 void finishLogging();
 void log(char *logText);
-
-struct window_t
-{
-	char* name;
-	int startX;
-	int startY;
-	int endX;
-	int endY;
-	char* attribute;
-};
-
 
 char *buffer;
 FILE *logFile;
