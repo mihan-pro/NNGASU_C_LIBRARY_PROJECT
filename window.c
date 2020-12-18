@@ -64,8 +64,21 @@ void startLogging();
 void finishLogging();
 void log(char *logText);
 
+struct window_t
+{
+	char* name;
+	int startX;
+	int startY;
+	int endX;
+	int endY;
+	char* attribute;
+};
+
+
 char *buffer;
 FILE *logFile;
+
+struct window_t A = {"", 1, 2, 3, 4, BLACK|BGBLUE};
 
 int main()
 {
