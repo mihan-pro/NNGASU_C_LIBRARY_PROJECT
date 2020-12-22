@@ -11,6 +11,6 @@ struct window_t
 
 struct window_t* window_create(char*name, int startX, int startY,int endX, int endY, char attribute);
 
-void window_open(struct window_t* w);
-void window_close(struct window_t*);
+void window_open(struct window_t *window, char* buffer);
+void window_close(char* buffer);
 void window_delete(struct window_t*);

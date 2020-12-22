@@ -1,6 +1,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
+#include "base.h"
 
 #define MAX_ROW 25
 #define MAX_COLUMN 80
@@ -90,11 +91,11 @@ void particularDescktop(int startX, int startY, int endX, int endY, char attr, c
 	name(windowName, startX, endX, startY, attr);
 }
 
-void name(char *name, int startX, int endX, int startY, char attr)
+void name(char *window_name, int startX, int endX, int startY, char attr)
 {
-	int sizeOfName = strlen(name);
+	int sizeOfName = strlen(window_name);
 	int position = startX + (endX - sizeOfName) / 2;
-	write_string(startY, position, name, attr);
+	write_string(startY, position, window_name, attr);
 };
 
 void write_char(int row, int column, char symbol, char attr)
@@ -149,15 +150,12 @@ char *createBuffer()
 	int size = BUFFER_SIZE;
 	char *tmpString;
 	char *sizeStr = itoa(size, tmpString, 10);
-	log(strcat(sizeStr, " - size of buffer\n"));
 	buffer = malloc(size);
 	if (!buffer)
 	{
 		perror("error in creating buffer \n");
-		log("error in creating buffer\n");
 		exit(1);
 	}
-	log("buffer was created succesfuly\n");
 	return buffer;
 }
 
@@ -176,7 +174,6 @@ void takeVideoMemory(char *buffer)
 		pointer += 1;
 		i += 1;
 	}
-	log("video memory was taken\n");
 };
 
 void putVideoMemory(char *buffer)
@@ -194,5 +191,4 @@ void putVideoMemory(char *buffer)
 		pointer += 1;
 		i += 1;
 	}
-	log("video memory was put\n");
 };

@@ -1,5 +1,4 @@
 #include "window.h"
-#include "base.h"
 
 #define BLACK 0
 #define BLUE 1
@@ -33,9 +32,6 @@ char *buffer;
 
 int main()
 {
-    struct window_t* window = window_create(window, 2 ,2, 60, 23, WHITE|BGBLUE);
-	buffer = createBuffer();
-    window_open(window);
-	free(buffer);
+    struct window_t* window = window_create("window", 2 ,2, 60, 23, WHITE|BGBLUE);
 	return 0;
 }
