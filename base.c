@@ -74,6 +74,16 @@ void createBorder(int startX, int startY, int endX, int endY, int typeOfBorder, 
 	}
 };
 
+void fullDescktop(char *windowName, int typeOfBorder, char attr)
+{
+	int row = 0;
+	int col = 0;
+	char border;
+	fullClear(attr);
+	createBorder(row, col, 79, 24, typeOfBorder, attr);
+	name(windowName, 0, MAX_ROW, 0, attr);
+}
+
 void particularDescktop(int startX, int startY, int endX, int endY, char attr, char *windowName, int typeOfBorder)
 {
 	particularClear(startX, startY, endX, endY, attr);

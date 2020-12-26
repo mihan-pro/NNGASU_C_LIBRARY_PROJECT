@@ -5,6 +5,7 @@ char *createBuffer();
 void fullClear(char attr);
 void particularClear(int startX, int startY, int endX, int endY, char attr);
 
+void fullDescktop(char *windowName, int typeOfBorder, char attr);
 void particularDescktop(int startX, int startY, int endX, int endY, char attr, char *windowName, int typeOfBorder);
 
 void takeVideoMemory(char *buffer);
