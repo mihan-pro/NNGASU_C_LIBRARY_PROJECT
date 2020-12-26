@@ -29,8 +29,6 @@
 
 #define BLINK 128
 
-
-
 int main()
 {
 	struct window_t* window = window_create("window", 2, 2, 60, 20, WHITE|BGBLUE, 1);

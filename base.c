@@ -90,11 +90,11 @@ void name(char *window_name, int startX, int endX, int startY, char attr)
 
 void write_char(int row, int column, char symbol, char attr)
 {
-	char *v = (char *)VIDEO_MEMORY;
-	v += row * 160 + column * 2;
-	*v = symbol;
-	v++;
-	*v = attr;
+	char *videoPointer = (char *)VIDEO_MEMORY;
+	videoPointer += row * 160 + column * 2;
+	*videoPointer = symbol;
+	videoPointer += 1;
+	*videoPointer = attr;
 };
 
 void write_string(int row, int column, char *string, char attr)
@@ -138,8 +138,6 @@ char *createBuffer()
 {
 	char *buffer;
 	int size = BUFFER_SIZE;
-	char *tmpString;
-	char *sizeStr = itoa(size, tmpString, 10);
 	buffer = malloc(size);
 	if (!buffer)
 	{
