@@ -1,4 +1,5 @@
 #include "window.h"
+#include "base.h"
 
 #define BLACK 0
 #define BLUE 1
@@ -28,10 +29,15 @@
 
 #define BLINK 128
 
-char *buffer;
+
 
 int main()
 {
-    struct window_t* window = window_create("window", 2 ,2, 60, 23, WHITE|BGBLUE);
+	struct window_t* window = window_create("window", 2, 2, 60, 20, WHITE|BGBLUE, 1);
+	struct window_t* frame = window_create("frame", 5, 5, 70, 10, WHITE|BGBLUE, 0);
+	window_open(frame);
+	window_open(window);
+	window_close(window);
+	window_delete(window);
 	return 0;
 }
