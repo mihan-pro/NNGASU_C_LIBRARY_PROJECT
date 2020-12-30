@@ -31,7 +31,7 @@
 int main()
 {
 	struct window_t* window = window_create("window", 2, 2, 60, 20, WHITE|BGBLUE, 1);
-	struct window_t* frame = window_create("frame", 5, 5, 70, 10, WHITE|BGBLUE, 0);
+	struct window_t* frame = window_create("frame", 2, 5, 100, 30, WHITE|BGBLUE, 0);
 	window_open(frame);
 	window_open(window);
 	window_close(window);

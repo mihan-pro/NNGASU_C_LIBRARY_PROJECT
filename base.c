@@ -39,15 +39,15 @@ int checkMinMaxValue(int value, int min, int max)
 	return value;
 }
 
-int checkMinMaxValueWithPrev(int value, int min, int max, int prev) 
+int checkMinMaxValueWithPrev(int value, int min, int max, int startValue) 
 {
 	/*
-		format value by min and max edge and make it equal prev value if it's less than it
+		format value by min and max edge and make it equal start value if it's less than it
 	*/
 	value = checkMinMaxValue(value, min, max);
-	if(value < prev) 
+	if(value < startValue) 
 	{
-		value = prev;
+		value = startValue;
 	}
 	return value;
 }
@@ -72,7 +72,7 @@ void createBorder(int startX, int startY, int endX, int endY, int typeOfBorder, 
 	{
 		for (; col <= endX; col++)
 		{
-			if (row == startX && col == startY)
+			if (row == startY && col == startX)
 			{
 				border = typeOfBorder ? DOUBLE_LEFT_TOP_CORNER : SOLID_LEFT_TOP_CORNER;
 				write_char(row, col, border, attr);
@@ -125,8 +125,8 @@ void createBorder(int startX, int startY, int endX, int endY, int typeOfBorder, 
 void particularDescktop(int startX, int startY, int endX, int endY, char attr, char *windowName, int typeOfBorder)
 {
 	typeOfBorder = (typeOfBorder == 1)? 1 : 0;
-	startX = checkMinMaxValue(startY, 0, 79);
-	startY = checkMinMaxValue(startX, 0, 24);
+	startX = checkMinMaxValue(startX, 0, 79);
+	startY = checkMinMaxValue(startY, 0, 24);
 	endX = checkMinMaxValueWithPrev(endX, 0, 79, startX);
 	endY = checkMinMaxValueWithPrev(endY, 0, 24, startY);
 	particularClear(startX, startY, endX, endY, attr);
