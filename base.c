@@ -26,7 +26,7 @@
 int checkMinMaxValue(int value, int min, int max) 
 {
 	/*
-		Приводит значение в рамки крайних значиний в случае выхода за пределы
+		format value by min and max edge
 	*/
 	if(value < min) 
 	{
@@ -39,19 +39,35 @@ int checkMinMaxValue(int value, int min, int max)
 	return value;
 }
 
+int checkMinMaxValueWithPrev(int value, int min, int max, int prev) 
+{
+	/*
+		format value by min and max edge and make it equal prev value if it's less than it
+	*/
+	value = checkMinMaxValue(value, min, max);
+	if(value < prev) 
+	{
+		value = prev;
+	}
+	return value;
+}
+
 /*
-	int startX - min value: 0, max value: 80
-	int startY - min value: 0, max value: 25
-	int endX - min value: 0, max value: 80 && endX > startX
-	int endY - min value: 0, max value: 25 && endY > startY
+	int startX - min value: 0, max value: 79
+	int startY - min value: 0, max value: 24
+	int endX - min value: 0, max value: 79 && endX > startX
+	int endY - min value: 0, max value: 24 && endY > startY
 	int typeOfBorder - 0 || 1
 	char attr - any
 */
 void createBorder(int startX, int startY, int endX, int endY, int typeOfBorder, char attr)
 {
 	char border;
-	int row = startY;
-	int col = startX;
+	int row = checkMinMaxValue(startY, 0, 24);
+	int col = checkMinMaxValue(startX, 0, 79);
+	typeOfBorder = (typeOfBorder == 1)? 1 : 0;
+	endX = checkMinMaxValueWithPrev(endX, 0, 79, col);
+	endY = checkMinMaxValueWithPrev(endY, 0, 24, row);
 	for (; row <= endY; row++)
 	{
 		for (; col <= endX; col++)
@@ -98,44 +114,62 @@ void createBorder(int startX, int startY, int endX, int endY, int typeOfBorder, 
 };
 
 /*
-	int startX - min value: 0, max value: 80
-	int startY - min value: 0, max value: 25
-	int endX - min value: 0, max value: 80 && endX > startX
-	int endY - min value: 0, max value: 25 && endY > startY
+	int startX - min value: 0, max value: 79
+	int startY - min value: 0, max value: 24
+	int endX - min value: 0, max value: 79 && endX > startX
+	int endY - min value: 0, max value: 24 && endY > startY
 	int typeOfBorder - 0 || 1
 	char attr - any
 	char *windowName - любая строка размером не более endX - startX
 */
 void particularDescktop(int startX, int startY, int endX, int endY, char attr, char *windowName, int typeOfBorder)
 {
+	typeOfBorder = (typeOfBorder == 1)? 1 : 0;
+	startX = checkMinMaxValue(startY, 0, 79);
+	startY = checkMinMaxValue(startX, 0, 24);
+	endX = checkMinMaxValueWithPrev(endX, 0, 79, startX);
+	endY = checkMinMaxValueWithPrev(endY, 0, 24, startY);
 	particularClear(startX, startY, endX, endY, attr);
 	createBorder(startX, startY, endX, endY, typeOfBorder, attr);
 	name(windowName, startX, endX, startY, attr);
 }
 
 /*
-	int startX - min value: 0, max value: 80
-	int startY - min value: 0, max value: 25
-	int endX - min value: 0, max value: 80 && endX > startX
+	int startX - min value: 0, max value: 79
+	int startY - min value: 0, max value: 24
+	int endX - min value: 0, max value: 79 && endX > startX
 	char attr - any
 	char *windowName - любая строка размером не более endX - startX
 */
 void name(char *window_name, int startX, int endX, int startY, char attr)
 {
+	int position;
+	char * correctedString = window_name;
+	int maxNameLength = endX - startX;
+	int nameLength = strlen(window_name);
 	int sizeOfName = strlen(window_name);
-	int position = startX + (endX - sizeOfName) / 2;
-	write_string(startY, position, window_name, attr);
+	startX = checkMinMaxValue(startY, 0, 79);
+	startY = checkMinMaxValue(startX, 0, 24);
+	endX = checkMinMaxValueWithPrev(endX, 0, 79, startX);
+	if( maxNameLength < nameLength)
+	{
+		window_name = strncpy(correctedString, window_name, maxNameLength);
+	}
+	position = startX + (endX - sizeOfName) / 2;
+	write_string(startY, position, correctedString, attr);
 };
 
 /*
-	int row -  min value: 0, max value: 25
-	int column - min value: 0, max value: 80
+	int row -  min value: 0, max value: 24
+	int column - min value: 0, max value: 79
 	char symbol - any symbol
 	char attr - any attribute symbol
 */
 void write_char(int row, int column, char symbol, char attr)
 {
 	char *videoPointer = (char *)VIDEO_MEMORY;
+	column = checkMinMaxValue(column, 0, 79);
+	row = checkMinMaxValue(row, 0, 24);
 	videoPointer += row * 160 + column * 2;
 	*videoPointer = symbol;
 	videoPointer += 1;
@@ -143,14 +177,16 @@ void write_char(int row, int column, char symbol, char attr)
 };
 
 /*
-	int row -  min value: 0, max value: 25
-	int column - min value: 0, max value: 80
+	int row -  min value: 0, max value: 24
+	int column - min value: 0, max value: 79
 	char *string - любая строка длинной не более 80 - column
 	char attr - any attribute symbol
 */
 void write_string(int row, int column, char *string, char attr)
 {
 	int i = 0;
+	row = checkMinMaxValue(row, 0, 24);
+	column = checkMinMaxValue(column, 0, 79);
 	while (string[i])
 	{
 		write_char(row, column++, string[i++], attr);
@@ -172,16 +208,16 @@ void fullClear(char attr)
 }
 
 /*	
-	int startX - min value: 0, max value: 80
-	int startY - min value: 0, max value: 25
-	int endX - min value: 0, max value: 80 && endX > startX
-	int endY - min value: 0, max value: 25 && endY > startY
+	int startX - min value: 0, max value: 79
+	int startY - min value: 0, max value: 24
+	int endX - min value: 0, max value: 79 && endX > startX
+	int endY - min value: 0, max value: 24 && endY > startY
 	char attr - any
 */
 void particularClear(int startX, int startY, int endX, int endY, char attr)
 {
-	int row = startY;
-	int col = startX;
+	int row = checkMinMaxValue(startY, 0, 24);
+	int col = checkMinMaxValue(startX, 0 , 79);
 	for (; row <= endY; row++)
 	{
 		for (; col <= endX; col++)
@@ -205,9 +241,6 @@ char *createBuffer()
 	return buffer;
 }
 
-/*
-	char *buffer указатель на область памяти не менее 4000 байт
-*/
 void takeVideoMemory(char *buffer)
 {
 	char *pointer = (char *)VIDEO_MEMORY;
@@ -225,9 +258,6 @@ void takeVideoMemory(char *buffer)
 	}
 };
 
-/*
-	char *buffer указатель на область памяти не менее 4000 байт
-*/
 void putVideoMemory(char *buffer)
 {
 	char *pointer = (char *)VIDEO_MEMORY;

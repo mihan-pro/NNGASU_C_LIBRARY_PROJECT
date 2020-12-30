@@ -10,3 +10,6 @@ void particularDescktop(int startX, int startY, int endX, int endY, char attr, c
 void takeVideoMemory(char *buffer);
 void putVideoMemory(char *buffer);
 void name(char *name, int startX, int endX, int startY, char attr);
+
+int checkMinMaxValue(int value, int min, int max);
+int checkMinMaxValueWithPrev(int value, int min, int max, int prev);
